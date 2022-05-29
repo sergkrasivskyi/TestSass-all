@@ -1,0 +1,122 @@
+@import "nullstyle.scss";
+/*--------------------*/
+// body{
+// color: red;
+// font-size: 30px;
+// }
+// Суперспособности препроцессора:
+//! 1. & -Вложенность - это способность обращаться к тегу внутри блока напрямую, а препроцессор сам формирует правило для css
+//! 2. $ - Переменные
+//! 3. @import - Можно импортировать файлы стилей
+//! 4. % -Шаблоны, описание шаблона отражается на его применении, если мы шаблон опишем позже указания
+//!    применения шаблона к элементам, то те элементы будут выглядеть как шаблон, а если надо что-то
+//!    изменить в этих элементах, то описание шаблона нужно делать вначале
+//  Шаблон также можно подключить через класс, тогда мы создаем некий класс, которого нет в исходном файле html
+// 5. Миксины - примеси, похож на шаблон, только еще круче
+// 6. Комментирование  - они не попадают в файл css, когда закомментированы двойной наклонной
+
+// Переменные для блока ... такогото
+$fz: 100px;
+$color1: green;
+$color2: yellow;
+$color3: blue;
+$color4: violet;
+
+// миксин для  ... того то
+@mixin fontz($f, $c) {
+        font-size: $f;
+        color: $c;
+}
+// Шаблон для  ссылки ... такойто
+%tplborder {
+    // определяем шаблош
+    font-size: $fz;
+    border-bottom: 5px dashed red;
+}
+
+.tplborder_by_class{
+    // определяем шаблон через класс
+    font-size: $fz;
+    border-bottom: 5px dashed violet;
+    &:hover{
+        border-bottom: 5px dashed rgb(0, 255, 34);
+    }
+}
+.block {
+    width: 300px / 960px * 100%;
+    padding: 30px;
+    line-height: 60px;
+    font-size: $fz;
+    color: $color4;
+    background: #666;
+
+    // > p{
+    // color: red; тут мы обратились только к верхнему папаграфу р в block с помощью оператора > 
+    // }
+    .block__text {
+        font-size: $fz;
+
+        span {
+            color: $color1;
+            font-size: $fz;
+
+            &:hover {
+                color: $color4;
+            }
+        }
+
+    }
+
+    &.block--big {
+        font-size: $fz;
+    }
+
+    a:hover {
+        color: $color2;
+    }
+}
+.link {
+    // color: $color3;
+    text-decoration: underline;
+    // font-size: $fz;
+    margin-left: 30px;
+    @include fontz(50px, blue);
+    // @extend %tplborder; подключаем как шаблон
+    // @extend .tplborder_by_class; подключаем как класс
+
+    // .block & {
+    // font-size: 100px;
+    // }
+    // &:hover {
+        // color: $color2;
+        // font-size: $fz;
+
+        // .block & {
+            // font-size: $fz;
+        // }
+    // }
+
+    &::before {
+        content: '';
+    }
+
+    &::after {
+        content: '';
+    }
+
+    &:active {}
+
+    &:focus {}
+
+    // & с помощью этого опрератора мы обращаемся к родителю и прописываем в удобном виде все необходимые действия в том числе и с приемениением псевдо опрераторов
+}
+
+.link-2 {
+    @include fontz(50px, green); // подключаем миксин с параметрами ,которые применяются
+
+    // font-size: $fz;
+    @extend .tplborder_by_class;
+    // @extend %tplborder;
+    // border-bottom: 10px dashed yellow;
+    // !тут мы перезаписали свойство border bototm, указанное в шаблоне, но если мы будем определять шаблон ниже в тесте, то он применится и к этому описанию и перезапишет его
+}
